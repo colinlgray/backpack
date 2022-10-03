@@ -42,7 +42,6 @@ export function CreatePassword({
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [error, setError] = useState<PasswordError | null>(null);
   const [showPassword, setShowPassword] = useState(false);
-  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
   useEffect(() => {
     setError(null);
@@ -106,6 +105,7 @@ export function CreatePassword({
               <InputAdornment position="end">
                 <IconButton
                   disableRipple
+                  sx={{ color: theme.custom.colors.icon }}
                   onClick={() => setShowPassword(!showPassword)}
                   onMouseDown={() => setShowPassword(!showPassword)}
                 >
@@ -117,24 +117,11 @@ export function CreatePassword({
           <TextField
             inputProps={{ name: "password-confirmation" }}
             placeholder="Confirm Password"
-            type={showPasswordConfirm ? "text" : "password"}
+            type={showPassword ? "text" : "password"}
             value={passwordConfirm}
             setValue={setPasswordConfirm}
             rootClass={classes.passwordFieldRoot}
             isError={error === PasswordError.NO_MATCH}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  disableRipple
-                  onClick={() => setShowPasswordConfirm(!showPasswordConfirm)}
-                  onMouseDown={() =>
-                    setShowPasswordConfirm(!showPasswordConfirm)
-                  }
-                >
-                  {showPasswordConfirm ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
           />
           {error !== null && (
             <Typography sx={{ color: theme.custom.colors.negative }}>
