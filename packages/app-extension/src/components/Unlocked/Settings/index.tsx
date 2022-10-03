@@ -1034,8 +1034,12 @@ export function ImportSecretKey({ blockchain }: { blockchain: Blockchain }) {
 function validateSecretKey(
   blockchain: Blockchain,
   secretKey: string,
-  existingPublicKeys: WalletPublicKeys
+  keyring: WalletPublicKeys
 ): string | boolean {
+  const existingPublicKeys = Object.values(keyring[blockchain])
+    .map((k) => k.map((i) => i.publicKey))
+    .flat();
+
   if (blockchain === Blockchain.SOLANA) {
     let keypair: Keypair | null = null;
     try {
@@ -1051,13 +1055,8 @@ function validateSecretKey(
       }
     }
 
-    // Check to see if the key has already been added to keyring
-    for (const keyArray of Object.values(existingPublicKeys.solana)) {
-      if (
-        keyArray.map((k) => k.publicKey).includes(keypair.publicKey.toString())
-      ) {
-        throw new Error("Key already exists");
-      }
+    if (existingPublicKeys.includes(keypair.publicKey.toString())) {
+      throw new Error("Key already exists");
     }
 
     return Buffer.from(keypair.secretKey).toString("hex");
@@ -1065,12 +1064,10 @@ function validateSecretKey(
     try {
       const wallet = new ethers.Wallet(secretKey);
 
-      // Check to see if the key has already been added to keyring
-      for (const keyArray of Object.values(keyring.ethereum)) {
-        if (keyArray.map((k) => k.publicKey).includes(wallet.publicKey)) {
-          throw new Error("Key already exists");
-        }
+      if (existingPublicKeys.includes(wallet.publicKey)) {
+        throw new Error("Key already exists");
       }
+
       return wallet.privateKey;
     } catch (_) {
       return false;
