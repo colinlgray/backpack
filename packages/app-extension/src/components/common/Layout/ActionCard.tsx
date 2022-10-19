@@ -7,17 +7,20 @@ export function ActionCard({
   textAdornment,
   onClick,
   disabled = false,
+  tabIndex = 0,
 }: {
   icon: any;
   text: string;
   textAdornment?: React.ReactNode;
   onClick: () => void;
   disabled?: boolean;
+  tabIndex?: number;
 }) {
   const theme = useCustomTheme();
   return (
     <Button
-      disableRipple
+      disableRipple={tabIndex === undefined}
+      tabIndex={tabIndex}
       onClick={onClick}
       style={{
         padding: 0,

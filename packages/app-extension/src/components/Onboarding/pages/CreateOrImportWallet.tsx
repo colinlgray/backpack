@@ -37,6 +37,7 @@ export const CreateOrImportWallet = () => {
                   }}
                 />
               }
+              tabIndex={0}
               text="Create a new wallet"
               onClick={() => navigate(`${pathname}/create`.replace("//", "/"))}
             />
@@ -50,6 +51,7 @@ export const CreateOrImportWallet = () => {
                   }}
                 />
               }
+              tabIndex={0}
               text="Import an existing wallet"
               onClick={() => navigate(`${pathname}/import`.replace("//", "/"))}
             />
